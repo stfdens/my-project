@@ -1,37 +1,32 @@
 const ClientError = require('../../exceptions/ClientError');
 
-class MuridHandler {
+class NilaiHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
 
-    this.postMuridByHandler = this.postMuridByHandler.bind(this);
-    this.getMuridByHandler = this.getMuridByHandler.bind(this);
-    this.getMuridByIdHandler = this.getMuridByIdHandler.bind(this);
-    this.updateMuridByIdHandler = this.updateMuridByIdHandler.bind(this);
-    this.deleteMuridByIdHandler = this.deleteMuridByIdHandler.bind(this);
+    this.postNilaiByHandler = this.postNilaiByHandler.bind(this);
+    this.getNilaiByHandler = this.getNilaiByHandler.bind(this);
+    this.getNilaiByIdHandler = this.getNilaiByIdHandler.bind(this);
+    this.updateNilaiByIdHandler = this.updateNilaiByIdHandler.bind(this);
+    this.deleteNilaiByIdHandler = this.deleteNilaiByIdHandler.bind(this);
   }
 
-  async postMuridByHandler(request, h) {
+  async postNilaiByHandler(request, h) {
     try {
-      this._validator.validateMurid(request.payload);
+      this._validator.nilaiPayload(request.payload);
       const {
-        nama, jurusan, nisn, kartupelajar,
+        kartupelajar, instrumen, aba, abo, atg, mikro,
       } = request.payload;
 
-      const data = await this._service.addMurid({
-        nama, jurusan, nisn, kartupelajar,
+      const id = await this._service.addNilai({
+        kartupelajar, instrumen, aba, abo, atg, mikro,
       });
 
-      const response = h.response({
+      return h.response({
         status: 'success',
-        message: 'Anda telah terdaftar',
-        data: {
-          data,
-        },
-      });
-      response.code(201);
-      return response;
+        data: id,
+      }).code(201);
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -53,32 +48,24 @@ class MuridHandler {
     }
   }
 
-  async getMuridByHandler() {
-    const dataMurid = await this._service.getAllmurid();
+  async getNilaiByHandler() {
+    const datas = await this._service.getNilai();
     return {
       status: 'success',
-      data: dataMurid,
+      data: datas,
     };
   }
 
-  async getMuridByIdHandler(request, h) {
+  async getNilaiByIdHandler(request, h) {
     try {
       const { id } = request.params;
 
-      const dataMurid = await this._service.getMuridById(id);
-      const nilais = await this._service.getMuridDanNilai(id);
+      const result = await this._service.getNilaiById(id);
 
-      const response = h.response({
+      return h.response({
         status: 'success',
-        data: {
-          murid: {
-            ...dataMurid,
-            nilai: nilais,
-          }
-        },
-      });
-      response.code(200);
-      return response;
+        data: result,
+      }).code(200);
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -92,7 +79,7 @@ class MuridHandler {
       // server error
       const response = h.response({
         status: 'fail',
-        message: 'Maaf terjadi kesalahan pada server kami',
+        message: 'Maaf terjadi kesalahan pada serverkami',
       });
       response.code(500);
       console.error(error);
@@ -100,25 +87,22 @@ class MuridHandler {
     }
   }
 
-  async updateMuridByIdHandler(request, h) {
+  async updateNilaiByIdHandler(request, h) {
     try {
-      this._validator.validateMurid(request.payload);
+      this._validator.nilaiPayload(request.payload);
       const { id } = request.params;
       const {
-        nama, jurusan, nisn, kartupelajar,
+        kartupelajar, instrumen, aba, abo, atg, mikro,
       } = request.payload;
 
-      const dataMurid = await this._service.updateMuridById(id, {
-        nama, jurusan, nisn, kartupelajar,
+      await this._service.putNilaiById(id, {
+        kartupelajar, instrumen, aba, abo, atg, mikro,
       });
 
-      const response = h.response({
-        stats: 'success',
-        message: 'data berhasil diperbarui',
-        data: dataMurid,
-      });
-      response.code(200);
-      return response;
+      return h.response({
+        status: 'success',
+        message: 'data nilai berhasil diperbarui',
+      }).code(200);
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -132,7 +116,7 @@ class MuridHandler {
       // server error
       const response = h.response({
         status: 'fail',
-        message: 'Maaf terjadi kesalahan pada server kami',
+        message: 'Maaf terjadi kesalahan pada serverkami',
       });
       response.code(500);
       console.error(error);
@@ -140,18 +124,16 @@ class MuridHandler {
     }
   }
 
-  async deleteMuridByIdHandler(request, h) {
+  async deleteNilaiByIdHandler(request, h) {
     try {
       const { id } = request.params;
 
-      await this._service.deleteMuridById(id);
+      await this._service.deleteNilaiById(id);
 
-      const response = h.response({
+      return h.response({
         status: 'success',
-        message: 'berhasil menghapus murid',
-      });
-      response.code(200);
-      return response;
+        message: 'Nilai berhasil dihapus',
+      }).code(200);
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -165,7 +147,7 @@ class MuridHandler {
       // server error
       const response = h.response({
         status: 'fail',
-        message: 'Maaf terjadi kesalahan pada server kami',
+        message: 'Maaf terjadi kesalahan pada serverkami',
       });
       response.code(500);
       console.error(error);
@@ -174,4 +156,4 @@ class MuridHandler {
   }
 }
 
-module.exports = MuridHandler;
+module.exports = NilaiHandler;

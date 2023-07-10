@@ -3,13 +3,13 @@ const MapDbToModelMurid = ({
   nama,
   jurusan,
   nisn,
-  nis,
+  kartupelajar,
 }) => ({
   id,
   nama,
   jurusan,
   nisn,
-  nis,
+  kartupelajar,
 });
 
 module.exports = MapDbToModelMurid;

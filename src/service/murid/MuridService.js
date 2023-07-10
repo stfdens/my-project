@@ -1,7 +1,9 @@
+/* eslint-disable import/no-unresolved */
 const { Pool } = require('pg');
 const InvariantError = require('../../exceptions/InvariantError');
-const MapDbToModelMurid = require('../../utils/MapDbToModel');
+const MapDbToModelMurid = require('../../utils/murid/MapDbToModel');
 const NotfoundError = require('../../exceptions/NotfoundError');
+const MuridAndNilai = require('../../utils/murid/muridandnilai');
 
 class MuridService {
   constructor() {
@@ -9,20 +11,20 @@ class MuridService {
   }
 
   async addMurid({
-    nama, jurusan, nisn, nis,
+    nama, jurusan, nisn, kartupelajar,
   }) {
     const query = {
-      text: 'INSERT INTO murid (nama, jurusan, nisn, nis) VALUES ($1, $2, $3, $4) RETURNING id',
-      values: [nama, jurusan, nisn, nis],
+      text: 'INSERT INTO murid (nama, jurusan, nisn, kartupelajar) VALUES ($1, $2, $3, $4) RETURNING id',
+      values: [nama, jurusan, nisn, kartupelajar],
     };
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rows[0].id) {
       throw new InvariantError('Murid gagal ditambahkan');
     }
 
-    return result.rows[0];
+    return result.rows[0].id;
   }
 
   async getAllmurid() {
@@ -42,15 +44,26 @@ class MuridService {
       throw new NotfoundError('Id tidak ditemukan');
     }
 
-    return result.rows.map(MapDbToModelMurid);
+    return result.rows.map(MapDbToModelMurid)[0];
+  }
+
+  async getMuridDanNilai(id) {
+    const query = {
+      text: 'select * from nilai join murid on nilai.kartupelajar = murid.kartupelajar WHERE murid.id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows.map(MuridAndNilai);
   }
 
   async updateMuridById(id, {
-    nama, jurusan, nisn, nis,
+    nama, jurusan, nisn, kartupelajar,
   }) {
     const query = {
-      text: 'UPDATE murid SET nama = $1, jurusan = $2, nisn = $3, nis = $4 WHERE id = $5 RETURNING id',
-      values: [nama, jurusan, nisn, nis, id],
+      text: 'UPDATE murid SET nama = $1, jurusan = $2, nisn = $3, kartupelajar = $4 WHERE id = $5 RETURNING id',
+      values: [nama, jurusan, nisn, kartupelajar, id],
     };
 
     const result = await this._pool.query(query);
