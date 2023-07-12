@@ -1,27 +1,29 @@
 const ClientError = require('../../exceptions/ClientError');
 
-class NilaiHandler {
+class AccountHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
 
-    this.postNilaiByHandler = this.postNilaiByHandler.bind(this);
-    this.getNilaiByHandler = this.getNilaiByHandler.bind(this);
-    this.getNilaiByIdHandler = this.getNilaiByIdHandler.bind(this);
-    this.updateNilaiByIdHandler = this.updateNilaiByIdHandler.bind(this);
-    this.deleteNilaiByIdHandler = this.deleteNilaiByIdHandler.bind(this);
+    this.postAccountByHandler = this.postAccountByHandler.bind(this);
+    this.getAccountByUsersHandler = this.getAccountByUsersHandler.bind(this);
+    this.updateAccountByUsersHandler = this.updateAccountByUsersHandler.bind(this);
+    this.deleteAccountByUsersHandler = this.deleteAccountByUsersHandler.bind(this);
   }
 
-  async postNilaiByHandler(request, h) {
+  async postAccountByHandler(request, h) {
     try {
-      this._validator.nilaiPayload(request.payload);
+      this._validator.AccountValidator(request.payload);
 
-      const id = await this._service.addNilai(request.params);
+      const data = await this._service.addUsers(request.payload);
 
-      return h.response({
+      const response = h.response({
         status: 'success',
-        data: id,
-      }).code(201);
+        message: 'account berhail dibuat',
+        accountId: data,
+      });
+      response.code(201);
+      return response;
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -43,22 +45,16 @@ class NilaiHandler {
     }
   }
 
-  async getNilaiByHandler() {
-    const datas = await this._service.getNilai();
-    return {
-      status: 'success',
-      data: datas,
-    };
-  }
-
-  async getNilaiByIdHandler(request, h) {
+  async getAccountByUsersHandler(request, h) {
     try {
-      const result = await this._service.getNilaiById(request.params);
+      const result = await this._service.getDetailAcc(request.params);
 
-      return h.response({
+      const response = h.response({
         status: 'success',
         data: result,
-      }).code(200);
+      });
+      response.code(200);
+      return response;
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -80,16 +76,18 @@ class NilaiHandler {
     }
   }
 
-  async updateNilaiByIdHandler(request, h) {
+  async updateAccountByUsersHandler(request, h) {
     try {
-      this._validator.nilaiPayload(request.payload);
+      this._validator.AccountValidator(request.payload);
 
-      await this._service.putNilaiById(request.params, request.payload);
+      await this._service.updateAccount(request.params, request.payload);
 
-      return h.response({
+      const response = h.response({
         status: 'success',
-        message: 'data nilai berhasil diperbarui',
-      }).code(200);
+        message: 'Account berhasil diperbarui',
+      });
+      response.code(200);
+      return response;
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -111,14 +109,16 @@ class NilaiHandler {
     }
   }
 
-  async deleteNilaiByIdHandler(request, h) {
+  async deleteAccountByUsersHandler(request, h) {
     try {
-      await this._service.deleteNilaiById(request.params);
+      await this._service.deleteAccount(request.params);
 
-      return h.response({
+      const response = h.response({
         status: 'success',
-        message: 'Nilai berhasil dihapus',
-      }).code(200);
+        message: 'users berhasil dihapus',
+      });
+      response.code(200);
+      return response;
     } catch (error) {
       if (error instanceof ClientError) {
         const response = h.response({
@@ -141,4 +141,4 @@ class NilaiHandler {
   }
 }
 
-module.exports = NilaiHandler;
+module.exports = AccountHandler;

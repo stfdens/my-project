@@ -14,9 +14,15 @@ const NilaiService = require('./service/nilai/NilaiService');
 const nilai = require('./api/nilai');
 const NilaiValidator = require('./validator/nilai');
 
+// account
+const AccountService = require('./service/account/usersService');
+const account = require('./api/account');
+const accountValidator = require('./validator/account');
+
 const init = async () => {
   const muridService = new MuridService();
   const nilaiService = new NilaiService();
+  const accountService = new AccountService();
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -36,6 +42,13 @@ const init = async () => {
       options: {
         service: nilaiService,
         validator: NilaiValidator,
+      },
+    },
+    {
+      plugin: account,
+      options: {
+        service: accountService,
+        validator: accountValidator,
       },
     },
   ]);

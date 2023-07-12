@@ -33,7 +33,7 @@ class NilaiService {
     return query.rows.map(MapDbToModelNilai);
   }
 
-  async getNilaiById(id) {
+  async getNilaiById({ id }) {
     const query = {
       text: 'SELECT * FROM nilai WHERE id = $1',
       values: [id],
@@ -48,7 +48,7 @@ class NilaiService {
     return result.rows.map(MapDbToModelNilai)[0];
   }
 
-  async putNilaiById(id, {
+  async putNilaiById({ id }, {
     kartupelajar, instrumen, aba, abo, atg, mikro,
   }) {
     const query = {
@@ -63,7 +63,7 @@ class NilaiService {
     }
   }
 
-  async deleteNilaiById(id) {
+  async deleteNilaiById({ id }) {
     const query = {
       text: 'DELETE FROM nilai WHERE id = $1 RETURNING id',
       values: [id],

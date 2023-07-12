@@ -32,7 +32,7 @@ class MuridService {
     return query.rows.map(MapDbToModelMurid);
   }
 
-  async getMuridById(id) {
+  async getMuridById({ id }) {
     const query = {
       text: 'SELECT * FROM murid WHERE id = $1',
       values: [id],
@@ -47,7 +47,7 @@ class MuridService {
     return result.rows.map(MapDbToModelMurid)[0];
   }
 
-  async getMuridDanNilai(id) {
+  async getMuridDanNilai({ id }) {
     const query = {
       text: 'select * from nilai join murid on nilai.kartupelajar = murid.kartupelajar WHERE murid.id = $1',
       values: [id],
@@ -58,7 +58,7 @@ class MuridService {
     return result.rows.map(MuridAndNilai);
   }
 
-  async updateMuridById(id, {
+  async updateMuridById({ id }, {
     nama, jurusan, nisn, kartupelajar,
   }) {
     const query = {
@@ -73,7 +73,7 @@ class MuridService {
     }
   }
 
-  async deleteMuridById(id) {
+  async deleteMuridById({ id }) {
     const query = {
       text: 'DELETE FROM murid WHERE id = $1 RETURNING id',
       values: [id],

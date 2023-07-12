@@ -15,13 +15,8 @@ class MuridHandler {
   async postMuridByHandler(request, h) {
     try {
       this._validator.validateMurid(request.payload);
-      const {
-        nama, jurusan, nisn, kartupelajar,
-      } = request.payload;
 
-      const data = await this._service.addMurid({
-        nama, jurusan, nisn, kartupelajar,
-      });
+      const data = await this._service.addMurid(request.payload);
 
       const response = h.response({
         status: 'success',
@@ -63,10 +58,8 @@ class MuridHandler {
 
   async getMuridByIdHandler(request, h) {
     try {
-      const { id } = request.params;
-
-      const dataMurid = await this._service.getMuridById(id);
-      const nilais = await this._service.getMuridDanNilai(id);
+      const dataMurid = await this._service.getMuridById(request.params);
+      const nilais = await this._service.getMuridDanNilai(request.params);
 
       const response = h.response({
         status: 'success',
@@ -74,7 +67,7 @@ class MuridHandler {
           murid: {
             ...dataMurid,
             nilai: nilais,
-          }
+          },
         },
       });
       response.code(200);
@@ -103,14 +96,8 @@ class MuridHandler {
   async updateMuridByIdHandler(request, h) {
     try {
       this._validator.validateMurid(request.payload);
-      const { id } = request.params;
-      const {
-        nama, jurusan, nisn, kartupelajar,
-      } = request.payload;
 
-      const dataMurid = await this._service.updateMuridById(id, {
-        nama, jurusan, nisn, kartupelajar,
-      });
+      const dataMurid = await this._service.updateMuridById(request.params, request.payload);
 
       const response = h.response({
         stats: 'success',
@@ -142,9 +129,7 @@ class MuridHandler {
 
   async deleteMuridByIdHandler(request, h) {
     try {
-      const { id } = request.params;
-
-      await this._service.deleteMuridById(id);
+      await this._service.deleteMuridById(request.params);
 
       const response = h.response({
         status: 'success',

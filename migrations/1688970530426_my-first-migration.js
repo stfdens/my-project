@@ -56,9 +56,53 @@ exports.up = (pgm) => {
       notNull: true,
     },
   });
+  pgm.createTable('account', {
+    id: {
+      type: 'serial',
+      primaryKey: true,
+    },
+    username: {
+      type: 'varchar(30)',
+      notNull: true,
+    },
+    email: {
+      type: 'varchar',
+      notNull: true,
+    },
+    password: {
+      type: 'varchar',
+      notNull: true,
+    },
+    created_at: {
+      type: 'timestamp',
+      notNull: true,
+      default: pgm.func('CURRENT_TIMESTAMP'),
+    },
+    updated_at: {
+      type: 'timestamp',
+      notNull: true,
+      default: pgm.func('CURRENT_TIMESTAMP'),
+      onUpdate: pgm.func('CURRENT_TIMESTAMP'),
+    },
+  });
+  pgm.createTable('role', {
+    owner: {
+      type: 'varchar',
+      notNull: false,
+    },
+    admin: {
+      type: 'varchar',
+      notNull: false,
+    },
+    siswa: {
+      type: 'varchar',
+      notNull: false,
+    },
+  });
 };
 
 exports.down = (pgm) => {
   pgm.dropTable('murid');
   pgm.dropTable('nilai');
+  pgm.dropTable('account');
 };
