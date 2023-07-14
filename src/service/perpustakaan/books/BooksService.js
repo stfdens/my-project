@@ -62,7 +62,7 @@ class BooksService {
 
   async deleteBookById({ id }) {
     const query = {
-      text: 'DELETE FROM books WHERE id = $1',
+      text: 'DELETE FROM books WHERE id = $1 RETURNING id',
       values: [id],
     };
 
