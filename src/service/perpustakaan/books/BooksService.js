@@ -11,7 +11,7 @@ class BooksService {
   }
 
   async addBuku({ nama_buku, genre, halaman_buku }) {
-    const id = `id-${nanoid(13)}`;
+    const id = `books-${nanoid(13)}`;
 
     const query = {
       text: 'INSERT INTO books VALUES ($1, $2, $3, $4) RETURNING id',

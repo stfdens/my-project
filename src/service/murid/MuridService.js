@@ -60,11 +60,11 @@ class MuridService {
   }
 
   async updateMuridById({ id }, {
-    nama, jurusan, nisn, kartupelajar,
+    nama, jurusan, kelas, nisn, kartupelajar,
   }) {
     const query = {
-      text: 'UPDATE murid SET nama = $1, jurusan = $2, nisn = $3, kartupelajar = $4 WHERE id = $5 RETURNING id',
-      values: [nama, jurusan, nisn, kartupelajar, id],
+      text: 'UPDATE murid SET nama = $1, jurusan = $2, kelas = $3, nisn = $4, kartupelajar = $5 WHERE id = $6 RETURNING id',
+      values: [nama, jurusan, kelas, nisn, kartupelajar, id],
     };
 
     const result = await this._pool.query(query);

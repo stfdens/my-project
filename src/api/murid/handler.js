@@ -127,7 +127,7 @@ class MuridHandler {
 
   async deleteMuridByIdHandler(request, h) {
     try {
-      await this._service.deleteMuridById(request.pa);
+      await this._service.deleteMuridById(request.params);
 
       const response = h.response({
         status: 'success',

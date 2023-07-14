@@ -16,6 +16,7 @@
     "consistent-return": "off",
     "camelcase": "off",
     "import/no-extraneous-dependencies": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "object-curly-newline": "off"
   }
 }

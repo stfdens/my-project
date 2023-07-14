@@ -111,7 +111,7 @@ exports.up = (pgm) => {
   });
 
   pgm.createTable('books', {
-    serial_id: {
+    id: {
       type: 'varchar',
       notNull: true,
     },

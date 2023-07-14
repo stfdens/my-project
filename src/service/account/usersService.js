@@ -62,12 +62,12 @@ class AccountService {
     return result.rows.map(MapDbToModelAccount);
   }
 
-  async updateAccount({ id }, { username, email, password }) {
+  async updateAccount({ id }, { username, email, password, status }) {
     const updatedat = new Date().toISOString();
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = {
-      text: 'UPDATE account SET username = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5 RETURNING id',
-      values: [username, email, hashedPassword, updatedat, id],
+      text: 'UPDATE account SET username = $1, email = $2, password = $3, status = $4, updated_at = $5 WHERE id = $6 RETURNING id',
+      values: [username, email, hashedPassword, status, updatedat, id],
     };
 
     const result = await this._pool.query(query);
