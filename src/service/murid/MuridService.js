@@ -4,6 +4,7 @@ const InvariantError = require('../../exceptions/InvariantError');
 const MapDbToModelMurid = require('../../utils/murid/MapDbToModel');
 const NotfoundError = require('../../exceptions/NotfoundError');
 const MuridAndNilai = require('../../utils/murid/muridandnilai');
+const MapDbToModelAllMurid = require('../../utils/murid/AllMurid');
 
 class MuridService {
   constructor() {
@@ -11,11 +12,11 @@ class MuridService {
   }
 
   async addMurid({
-    nama, jurusan, nisn, kartupelajar,
+    nama, jurusan, kelas, nisn, kartupelajar,
   }) {
     const query = {
-      text: 'INSERT INTO murid (nama, jurusan, nisn, kartupelajar) VALUES ($1, $2, $3, $4) RETURNING id',
-      values: [nama, jurusan, nisn, kartupelajar],
+      text: 'INSERT INTO murid (nama, jurusan, kelas, nisn, kartupelajar) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      values: [nama, jurusan, kelas, nisn, kartupelajar],
     };
 
     const result = await this._pool.query(query);
@@ -29,7 +30,7 @@ class MuridService {
 
   async getAllmurid() {
     const query = await this._pool.query('SELECT * FROM murid');
-    return query.rows.map(MapDbToModelMurid);
+    return query.rows.map(MapDbToModelAllMurid);
   }
 
   async getMuridById({ id }) {

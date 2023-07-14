@@ -19,10 +19,16 @@ const AccountService = require('./service/account/usersService');
 const account = require('./api/account');
 const accountValidator = require('./validator/account');
 
+// perpustakaan books
+const BooksService = require('./service/perpustakaan/books/BooksService');
+const books = require('./api/perpustakaan/books');
+const PerpusBooksValidator = require('./validator/perpustakaan/books');
+
 const init = async () => {
   const muridService = new MuridService();
   const nilaiService = new NilaiService();
   const accountService = new AccountService();
+  const booksService = new BooksService();
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -49,6 +55,13 @@ const init = async () => {
       options: {
         service: accountService,
         validator: accountValidator,
+      },
+    },
+    {
+      plugin: books,
+      options: {
+        service: booksService,
+        validator: PerpusBooksValidator,
       },
     },
   ]);

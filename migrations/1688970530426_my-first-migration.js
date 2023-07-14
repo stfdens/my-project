@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 
+/* eslint-disable camelcase */
+
 exports.up = (pgm) => {
   pgm.createTable('murid', {
     id: {
@@ -14,6 +16,10 @@ exports.up = (pgm) => {
       type: 'varchar(50)',
       notNull: true,
     },
+    kelas: {
+      type: 'varchar',
+      notNull: true,
+    },
     nisn: {
       type: 'integer',
       notNull: true,
@@ -25,6 +31,7 @@ exports.up = (pgm) => {
       unique: true,
     },
   });
+
   pgm.createTable('nilai', {
     id: {
       type: 'varchar',
@@ -56,6 +63,22 @@ exports.up = (pgm) => {
       notNull: true,
     },
   });
+
+  pgm.createTable('role', {
+    id: {
+      type: 'serial',
+      primaryKey: true,
+    },
+    name: {
+      type: 'varchar',
+      notNull: true,
+    },
+    description: {
+      type: 'varchar',
+      notNull: true,
+    },
+  });
+
   pgm.createTable('account', {
     id: {
       type: 'serial',
@@ -63,6 +86,10 @@ exports.up = (pgm) => {
     },
     username: {
       type: 'varchar(30)',
+      notNull: true,
+    },
+    status: {
+      type: 'varchar(5)',
       notNull: true,
     },
     email: {
@@ -74,29 +101,54 @@ exports.up = (pgm) => {
       notNull: true,
     },
     created_at: {
-      type: 'timestamp',
+      type: 'varchar',
       notNull: true,
-      default: pgm.func('CURRENT_TIMESTAMP'),
     },
     updated_at: {
-      type: 'timestamp',
+      type: 'varchar',
       notNull: true,
-      default: pgm.func('CURRENT_TIMESTAMP'),
-      onUpdate: pgm.func('CURRENT_TIMESTAMP'),
     },
   });
-  pgm.createTable('role', {
-    owner: {
+
+  pgm.createTable('books', {
+    serial_id: {
       type: 'varchar',
-      notNull: false,
+      notNull: true,
     },
-    admin: {
+    nama_buku: {
       type: 'varchar',
-      notNull: false,
+      notNull: true,
     },
-    siswa: {
+    genre: {
       type: 'varchar',
-      notNull: false,
+      notNull: true,
+    },
+    halaman_buku: {
+      type: 'integer',
+      notNull: true,
+    },
+  });
+
+  pgm.createTable('perpustakaan', {
+    kartupelajar: {
+      type: 'integer',
+      notNull: true,
+    },
+    namabuku: {
+      type: 'varchar',
+      notNull: true,
+    },
+    genre: {
+      type: 'varchar',
+      notNull: true,
+    },
+    tanggal_peminjaman: {
+      type: 'varchar',
+      notNull: true,
+    },
+    tanggal_pengembalian: {
+      type: 'varchar',
+      notNull: true,
     },
   });
 };
@@ -105,4 +157,7 @@ exports.down = (pgm) => {
   pgm.dropTable('murid');
   pgm.dropTable('nilai');
   pgm.dropTable('account');
+  pgm.dropTable('role');
+  pgm.dropTable('perpustakaan');
+  pgm.dropTable('books');
 };

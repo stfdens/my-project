@@ -59,15 +59,13 @@ class MuridHandler {
   async getMuridByIdHandler(request, h) {
     try {
       const dataMurid = await this._service.getMuridById(request.params);
-      const nilais = await this._service.getMuridDanNilai(request.params);
+      // const nilais = await this._service.getMuridDanNilai(request.params);
 
       const response = h.response({
         status: 'success',
         data: {
-          murid: {
-            ...dataMurid,
-            nilai: nilais,
-          },
+          ...dataMurid,
+          // nilai: nilais,
         },
       });
       response.code(200);
@@ -129,7 +127,7 @@ class MuridHandler {
 
   async deleteMuridByIdHandler(request, h) {
     try {
-      await this._service.deleteMuridById(request.params);
+      await this._service.deleteMuridById(request.pa);
 
       const response = h.response({
         status: 'success',

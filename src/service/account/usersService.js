@@ -9,7 +9,11 @@ class AccountService {
     this._pool = new Pool();
   }
 
-  async addUsers({ username, email, password }) {
+  async addUsers({
+    username, email, password, status,
+  }) {
+    const createdat = new Date().toISOString();
+    const updatedat = createdat;
     // verifikasi username
     await this.verifyNewUser(username);
 
@@ -17,8 +21,8 @@ class AccountService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const query = {
-      text: 'INSERT INTO account (username, email, password) VALUES ($1, $2, $3) RETURNING id',
-      values: [username, email, hashedPassword],
+      text: 'INSERT INTO account (username, status, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+      values: [username, status, email, hashedPassword, createdat, updatedat],
     };
 
     const result = await this._pool.query(query);
@@ -59,10 +63,11 @@ class AccountService {
   }
 
   async updateAccount({ id }, { username, email, password }) {
+    const updatedat = new Date().toISOString();
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = {
-      text: 'UPDATE account SET username = $1, email = $2, password = $3 WHERE id = $4 RETURNING id',
-      values: [username, email, hashedPassword, id],
+      text: 'UPDATE account SET username = $1, email = $2, password = $3, updated_at = $4 WHERE id = $5 RETURNING id',
+      values: [username, email, hashedPassword, updatedat, id],
     };
 
     const result = await this._pool.query(query);
