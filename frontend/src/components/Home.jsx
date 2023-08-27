@@ -1,6 +1,10 @@
 function Home() {
   return (
-    <div id='home'>Home</div>
+    <div className="container mx-auto mt-14">
+      <div className="flex justify-center">
+        Home
+      </div>
+    </div>
   )
 }
 

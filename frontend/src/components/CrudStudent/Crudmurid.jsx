@@ -3,6 +3,8 @@ import axios from "axios"
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react"
 import AddCrudMurid from "./AddCrudMurid";
+import { Link } from "react-router-dom"
+
 
 function Crudmurid() {
   const [student, Setstudent] = useState([]);
@@ -41,8 +43,8 @@ function Crudmurid() {
                   <tr className="font-bold text-2xl">
                     <th className="p-2 border">NO</th>
                     <th className="p-2 border">NAMA</th>
-                    <th className="p-2 border">KELAS</th>
                     <th className="p-2 border">JURUSAN</th>
+                    <th className="p-2 border">KELAS</th>
                     <th className="p-2 border">NIS</th>
                     <th className="p-2 border">NISN</th>
                     <th className="p-2 border">ACTION</th>
@@ -53,11 +55,15 @@ function Crudmurid() {
                   <tr key={data.id}>
                     <td className="p-2 border">{index + 1}</td>
                     <td className="p-2 border">{data.nama}</td>
-                    <td className="p-2 border">{data.kelas}</td>
                     <td className="p-2 border">{data.jurusan}</td>
+                    <td className="p-2 border">{data.kelas}</td>
                     <td className="p-2 border">{data.nis}</td>
                     <td className="p-2 border">{data.kartupelajar}</td>
-                    <td className="p-2 border">Edit / Delete</td>
+                    <td className="p-2 border">
+                      <Link to={`/murid/update/${data._id}`}>
+                        <span className="flex justify-center items-center"> <i className="fa-solid fa-pen-to-square" title="Edit Data"></i></span>
+                      </Link>
+                    </td>
                   </tr>
                   ))}
                 </tbody>

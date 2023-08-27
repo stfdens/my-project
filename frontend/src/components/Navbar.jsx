@@ -35,7 +35,6 @@ function Navbar() {
   useEffect(() => {
     if(!login) {
         data()
-        console.log(login)
     }
   })
 
@@ -52,8 +51,8 @@ function Navbar() {
                 {login ? (
                     <button onClick={mauLogot} className="">Logout</button>
                 ) : (
-                    <div className="font-medium">
-                        <a href="/login" className='mr-2'>Login</a>
+                    <div className="font-medium text-lg">
+                        <a href="/login" className='mr-4'>Login</a>
                         <a href="/signup">Signup</a>
                     </div>
                 )}
