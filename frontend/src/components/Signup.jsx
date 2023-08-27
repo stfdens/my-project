@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Signup() {
     const [ username, setUsername ] = useState('');
     const [ email, setEmail ] = useState();
     const [ password, setPassword ] = useState();
+    const navigate = useNavigate();
 
     const daftar = async (e) => {
         e.preventDefault();
@@ -18,8 +20,8 @@ function Signup() {
 
         try {
             await axios.post('http://localhost:3000/daftar', data)
-            console.log('success');
-            toast.success('well')
+            navigate('/login')
+            toast.success('AKUN ANDA BERHASIL TERDAFTAR')
         } catch (error) {
             toast.error('Masukan data yang benar!')
             console.log(error);

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react"
 import AddCrudMurid from "./AddCrudMurid";
 import { Link } from "react-router-dom"
+import { toast } from "react-toastify";
 
 
 function Crudmurid() {
@@ -23,6 +24,20 @@ function Crudmurid() {
         Setstudent(response.data.data);
     } catch (error) {
         console.log(error);
+    }
+  }
+
+  const deleteData = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/murid/deleteData/${id}`, {
+        headers: {
+          Authrorization: `Bearer ${refreshToken}`
+        },
+      })
+      toast.success('data berhasil di hapus')
+      data()
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -51,7 +66,12 @@ function Crudmurid() {
                   </tr>
                 </thead>
                 <tbody>
-                {student.map((data, index) => (
+                {student.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="text-center p-5 font-bold text-lg">Tidak ada data</td>
+                </tr>
+              ) : (
+                student.map((data, index) => (
                   <tr key={data.id}>
                     <td className="p-2 border">{index + 1}</td>
                     <td className="p-2 border">{data.nama}</td>
@@ -60,12 +80,18 @@ function Crudmurid() {
                     <td className="p-2 border">{data.nis}</td>
                     <td className="p-2 border">{data.kartupelajar}</td>
                     <td className="p-2 border">
-                      <Link to={`/murid/update/${data._id}`}>
-                        <span className="flex justify-center items-center"> <i className="fa-solid fa-pen-to-square" title="Edit Data"></i></span>
-                      </Link>
+                      <span className="flex justify-center items-center">
+                        <Link to={`/murid/update/${data._id}`}>
+                          <i className="fa-solid fa-pen-to-square" title="Edit Data"></i>
+                        </Link>
+                        <i className="fa-solid fa-trash ml-2" title="DELETE DATA" onClick={() => {
+                          return window.confirm('Apakah anda yakin untuk menghapus data?') ? deleteData(data._id) : "";
+                        }}></i>
+                      </span>
                     </td>
                   </tr>
-                  ))}
+                ))
+              )}
                 </tbody>
               </table>
           </div>

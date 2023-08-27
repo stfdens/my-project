@@ -51,7 +51,7 @@ function Navbar() {
                 {login ? (
                     <button onClick={mauLogot} className="">Logout</button>
                 ) : (
-                    <div className="font-medium text-lg">
+                    <div className="font-medium text-lg ">
                         <a href="/login" className='mr-4'>Login</a>
                         <a href="/signup">Signup</a>
                     </div>
