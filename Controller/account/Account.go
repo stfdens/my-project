@@ -6,7 +6,13 @@ import (
 	db "taskone/Db"
 
 	"github.com/labstack/echo/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
 
 func PostAccount(c echo.Context) error {
 	data := new(db.Account)
@@ -15,9 +21,25 @@ func PostAccount(c echo.Context) error {
 		return (err)
 	}
 
+	if data.Email == "" || data.Username == "" || data.Password == "" {
+		return c.JSON(http.StatusBadRequest, "masukan data yang benar")
+	}
+
+	hash, err := HashPassword(data.Password)
+
+	if err != nil {
+		return (err)
+	}
+
+	data.Password = hash
+
 	data.ID = len(db.NewAccount) + 1
 	db.NewAccount = append(db.NewAccount, *data)
-	return c.JSON(http.StatusCreated, data)
+	response := map[string]interface{}{
+		"status":  "success",
+		"message": "data berhasil ditambahkan",
+	}
+	return c.JSON(http.StatusCreated, response)
 }
 
 func GetAccount(c echo.Context) error {
