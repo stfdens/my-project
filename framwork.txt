@@ -1,0 +1,4 @@
+go get -u github.com/lib/pq // for driver postgres
+go get import "github.com/go-sql-driver/mysql" // open connection
+go get "github.com/golang-migrate/migrate" //migrate
+go get -u github.com/gorilla/mux // buat route
